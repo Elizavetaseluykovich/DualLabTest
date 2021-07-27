@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
+import Calendar from './components/Calendar';
+import Chart from './components/Chart';
+import { fetchData } from './redux/actions';
 
 function App() {
+  const dispatch = useDispatch();
+  const {startDate, endDate } = useSelector(state => state);
+  const [currency_id, setCurrencyId] = useState(145);
+
+  useEffect(() => {
+    dispatch(fetchData(currency_id, startDate, endDate))
+  }, [startDate, endDate, dispatch, currency_id]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <select value={currency_id} onChange={e => setCurrencyId(e.target.value)}>
+        <option value="145">USD</option>
+        <option value="292">EUR</option>
+        <option value="298">RUR</option>
+      </select>
+      <Chart/>
+      <Calendar/>
     </div>
   );
 }
